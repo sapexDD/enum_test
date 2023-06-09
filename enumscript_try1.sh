@@ -42,7 +42,7 @@ telnet_port="23"
 if check_port "$1" "$telnet_port"; then
     # Save Telnet banner
     echo "Saving Telnet banner..."
-    telnet_banner=$(echo "open $1 $telnet_port" | telnet 2>/dev/null | grep -v "Escape character is")
+    telnet_banner=$(echo -e "open $1 $telnet_port\nquit" | telnet |& grep -v "Escape character is" | sed '1,/#/d')
     save_info "Telnet banner:"
     save_info "$telnet_banner"
 else
