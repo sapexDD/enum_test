@@ -54,7 +54,7 @@ ftp_port="21"
 if check_port "$1" "$ftp_port"; then
     # Check if anonymous FTP is open
     echo "Checking for anonymous FTP..."
-    if echo -e "open $1 $ftp_port\nanonymous\nquit" | ftp -n -v "$1" 2>/dev/null | grep -q "230 Login successful"; then
+    if echo -e "open $1 $ftp_port\nanonymous\nanonymous\nquit" | ftp -n -v "$1" 2>/dev/null | grep -q "230 Login successful"; then
         save_info "Anonymous FTP is open."
     else
         save_info "Anonymous FTP is not open."
