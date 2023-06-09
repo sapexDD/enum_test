@@ -17,6 +17,13 @@ save_info() {
     echo "$1" >> "$output_file"
 }
 
+# Function to display the Telnet banner
+display_telnet_banner() {
+    echo "Telnet banner:"
+    echo "$1"
+    echo ""
+}
+
 # Check if HTTP port is open
 http_ports=("80" "8080")  # Add additional HTTP ports if needed
 http_service="Apache HTTP Server"  # Specify the HTTP service name
@@ -43,6 +50,7 @@ if check_port "$1" "$telnet_port"; then
     # Save Telnet banner
     echo "Saving Telnet banner..."
     telnet_banner=$(echo -e "open $1 $telnet_port\nquit" | telnet |& grep -v "Escape character is" | sed '1,/#/d')
+    display_telnet_banner "$telnet_banner"
     save_info "Telnet banner:"
     save_info "$telnet_banner"
 else
@@ -65,7 +73,7 @@ fi
 
 # Run Nmap scan
 echo "Running Nmap scan..."
-nmap_scan=$(nmap -p- -T4 "$1" 2>/dev/null)
+nmap_scan=$(nmap -A -p- -T4 "$1" 2>/dev/null)
 save_info "Nmap scan results:"
 save_info "$nmap_scan"
 
