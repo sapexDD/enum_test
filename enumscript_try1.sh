@@ -27,7 +27,7 @@ for port in "${http_ports[@]}"; do
         http_found=true
         # Run Nikto scan
         echo "Running Nikto scan for $http_service on port $port..."
-        nikto_scan=$(nikto -h "$1:$port" -output "$output_file" 2>/dev/null)
+        nikto_scan=$(nikto -h "$1:$port" 2>/dev/null)
         save_info "Nikto scan results for $http_service on port $port:"
         save_info "$nikto_scan"
     fi
@@ -62,5 +62,11 @@ if check_port "$1" "$ftp_port"; then
 else
     echo "FTP port ($ftp_port) is closed."
 fi
+
+# Run Nmap scan
+echo "Running Nmap scan..."
+nmap_scan=$(nmap -p- -T4 "$1" 2>/dev/null)
+save_info "Nmap scan results:"
+save_info "$nmap_scan"
 
 echo "Penetration testing completed. Results saved in $output_file."
